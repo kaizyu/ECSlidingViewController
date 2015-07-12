@@ -24,73 +24,14 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "ECSlidingConstants.h"
+#import "UIViewController+ECSlidingViewController.h"
+#import "ECSlidingInteractiveTransition.h"
+#import "ECPercentDrivenInteractiveTransition.h"
+#import "ECSlidingAnimationController.h"
+#import "ECSlidingSegue.h"
+#import "ECSlidingViewControllerLayout.h"
+#import "ECSlidingViewControllerDelegate.h"
 
-@class ECSlidingViewController;
-
-/**
- The `ECSlidingViewControllerLayout` protocol is adopted by an object that specifies a custom layout for the child view controllers.
- */
-@protocol ECSlidingViewControllerLayout <NSObject>
-
-/**
- Called when the sliding view controller needs to update the child views in response to a rotation or bounds change.
- 
- @param slidingViewController The sliding view controller that needs to update its layout.
- @param viewController The view controller that needs a layout update.
- @param topViewPosition The position of the top view.
- 
- @return A frame for the given view controller at the given top view position. Return `CGRectInfinite` to use the default layout.
- */
-- (CGRect)slidingViewController:(ECSlidingViewController *)slidingViewController
-         frameForViewController:(UIViewController *)viewController
-                topViewPosition:(ECSlidingViewControllerTopViewPosition)topViewPosition;
-@end
-
-/**
- The `ECSlidingViewControllerDelegate` protocol is adopted by an object that may customize a sliding view controller's animation transition, interactive transition, or the layout of the child views.
- */
-@protocol ECSlidingViewControllerDelegate
-
-@optional
-/**
- Called to allow the delegate to return a non-interactive animator object for use during a transition.
- 
- Returning an object will disable the sliding view controller's `transitionCoordinator` animation and completion callbacks.
- 
- @param slidingViewController The sliding view controller that is being transitioned.
- @param operation The type of transition that is occuring. See `ECSlidingViewControllerOperation` for a list of possible values.
- @param topViewController
- 
- @return The animator object responsible for managing the transition animations, or nil if you want to use the standard sliding view controller transitions. The object you return must conform to the `UIViewControllerAnimatedTransitioning` protocol.
- */
-- (id<UIViewControllerAnimatedTransitioning>)slidingViewController:(ECSlidingViewController *)slidingViewController
-                                   animationControllerForOperation:(ECSlidingViewControllerOperation)operation
-                                                 topViewController:(UIViewController *)topViewController;
-
-/**
- Called to allow the delegate to return an interactive animator object for use during a transition.
- 
- Returning an object will disable the sliding view controller's `transitionCoordinator` block given to `notifyWhenInteractionEndsUsingBlock:`
- 
- @param slidingViewController The sliding view controller that is being transitioned.
- @param animationController The non-interactive animator object. This will be the same object that is returned from `slidingViewController:animationController:topViewController`.
- 
- @return The animator object responsible for managing the interactive transition, or nil if you want to use the standard sliding view controller transitions. The object you return must conform to the `UIViewControllerInteractiveTransitioning` protocol.
- */
-- (id<UIViewControllerInteractiveTransitioning>)slidingViewController:(ECSlidingViewController *)slidingViewController
-                          interactionControllerForAnimationController:(id <UIViewControllerAnimatedTransitioning>)animationController;
-
-/**
- Called to allow the delegate to return a layout object to customize the layout of a sliding view controller's child views.
- 
- @param slidingViewController The sliding view controller whose layout needs updated.
- @param topViewPosition The position of the top view.
- 
- @return The layout object responsible for managing the layout, or nil if you want to use the standard sliding view controller layout. The object you return must conform to the `ECSlidingViewControllerLayout` protocol.
- */
-- (id<ECSlidingViewControllerLayout>)slidingViewController:(ECSlidingViewController *)slidingViewController
-                        layoutControllerForTopViewPosition:(ECSlidingViewControllerTopViewPosition)topViewPosition;
-@end
 
 /**
  `ECSlidingViewController` is a view controller container that manages a layered interface. The top layer anchors to the left or right side of the container while revealing the layer underneath it. This is most commonly known as the "Side Menu", "Slide Out", "Hamburger Menu/Drawer/Sidebar", etc...

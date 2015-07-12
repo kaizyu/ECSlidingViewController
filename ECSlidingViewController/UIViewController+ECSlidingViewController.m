@@ -22,6 +22,7 @@
 // THE SOFTWARE.
 
 #import "UIViewController+ECSlidingViewController.h"
+#import "ECSlidingViewController.h"
 
 @implementation UIViewController (ECSlidingViewController)
 

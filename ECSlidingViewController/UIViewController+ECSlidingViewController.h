@@ -23,7 +23,8 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import "ECSlidingViewController.h"
+
+@class ECSlidingViewController;
 
 /**
  This category adds a convience method on `UIViewController` for accessing a sliding view controller from one of its child view controllers.
